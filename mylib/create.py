@@ -1,7 +1,7 @@
 import numpy as np
 import os
 
-def create_beam(x:list[float] = None, y:list[float] = None, steps: int = 1000) -> str:
+def create_beam(point_num: int = 11, x:list[float] = None, y:list[float] = None, steps: int = 1000) -> str:
     """
     Create a beam model with specified parameters.
     Args:
@@ -13,7 +13,9 @@ def create_beam(x:list[float] = None, y:list[float] = None, steps: int = 1000) -
     E, v = 2e11, 0.3  # Young's modulus and Poisson's ratio
     b, h = 0.1, 0.1  # Width and height of the beam
     shape = 1 # Shape of the beam (1 for rectangular, 0 for circular)
-    point_num = 11
+    point_num = point_num  # Number of points along the beam
+    if point_num < 2:
+        raise ValueError("point_num must be at least 2.")
     length = 10 # Length of the beam
     goal_M = 2*np.pi*E*b*h **3/12/length  # Moment of inertia for rectangular section
     M = goal_M / steps  # Moment applied at the end of the beam
