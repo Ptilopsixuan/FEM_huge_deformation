@@ -326,6 +326,8 @@ class InputData:
         tmp = np.matmul(inv, P).T
         self.A = [np.round(x, 12) for x in tmp]
         for a in self.A:
+            if a == 0: # if a is zero, we need to remember the index, in order to replace it again
+                a = "con"
             self.Result[self.Result.index(0)] = a
         self.Result = [0 if r == "con" else r for r in self.Result]
         for i, p in enumerate(self.points):
