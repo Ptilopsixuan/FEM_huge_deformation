@@ -6,17 +6,18 @@ x = None  # Example x-coordinates
 y = None  # Example y-coordinates
 # theta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # Example rotation angles
 
-steps = 2000
+steps = 20000
 for i in range(steps):
     file_str = create.create_beam(11, x, y, steps)
-    input_path = os.path.join(os.getcwd(), "input","iterator", f"beam_{i:04d}.txt")
+    input_path = os.path.join(os.getcwd(), "input","iterator", f"beam_{i:05d}.txt")
     if not os.path.exists(os.path.dirname(input_path)):
         os.makedirs(os.path.dirname(input_path))
-    print(f"Creating file: {input_path}")
+    if i%10 == 0:
+        print(f"Creating file: {input_path}")
     with open(input_path, "w") as f:
         f.write(file_str)
 
-    model_name = f"beam_{i:04d}"  # Change this to the name of your model file without extension
+    model_name = f"beam_{i:05d}"  # Change this to the name of your model file without extension
     model = reader.readFile(input_path, shear = False)
     model.integrateKe()
     model.integratePe()

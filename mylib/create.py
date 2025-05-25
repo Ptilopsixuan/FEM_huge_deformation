@@ -11,7 +11,7 @@ def create_beam(point_num: int = 11, x:list[float] = None, y:list[float] = None,
         str: A string representation of the beam model data.
     """
     E, v = 2e11, 0.3  # Young's modulus and Poisson's ratio
-    b, h = 0.1, 0.1  # Width and height of the beam
+    b, h = 0.2, 0.3  # Width and height of the beam
     shape = 1 # Shape of the beam (1 for rectangular, 0 for circular)
     point_num = point_num  # Number of points along the beam
     if point_num < 2:
