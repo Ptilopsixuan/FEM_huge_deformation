@@ -6,7 +6,7 @@ def readLine(line: str) -> str:
     tmp = line.split('#')
     return re.sub('[\\s,，；;]+', ' ', tmp[0]).strip()
 
-def readFile(filePath: str, shear: bool = False) -> type.InputData:
+def readFile(filePath: str) -> type.GeoNonlinear:
     fileData = []
     pic_path = filePath.replace(".txt", ".png")
     try:
@@ -21,10 +21,10 @@ def readFile(filePath: str, shear: bool = False) -> type.InputData:
                 fileData.append(tmp)
     except Exception as e:
         print(e, '\n文件读取失败，请检查文件路径')
-    return parseData(fileData, pic_path, shear)
+    return parseData(fileData, pic_path)
 
-def parseData(src: list[list[float]], pic_path: str, shear: bool = False) -> type.InputData:
-    data = type.InputData()
+def parseData(src: list[list[float]], pic_path: str) -> type.GeoNonlinear:
+    data = type.GeoNonlinear()
     try:
         # 节点数目和节点坐标：编号  x坐标  y坐标
         count = src.pop(0)[0]
@@ -49,7 +49,7 @@ def parseData(src: list[list[float]], pic_path: str, shear: bool = False) -> typ
             tmp[2] = getItemById(data.points, tmp[2])
             tmp[3] = getItemById(data.materials, tmp[3])
             tmp[4] = getItemById(data.planes, tmp[4])
-            data.units.append(type.Unit(tmp, shear))
+            data.units.append(type.Unit(tmp))
             count -= 1
         # 荷载信息 ：节点号，x方向力，y方向力
         count = src.pop(0)[0]
@@ -64,24 +64,6 @@ def parseData(src: list[list[float]], pic_path: str, shear: bool = False) -> typ
             tmp = src.pop(0)
             tmp[0] = getItemById(data.points, tmp[0])
             data.constraints.append(type.Constraint(tmp))
-            count -= 1
-        # 铰接: 单元号，节点号
-        count = src.pop(0)[0]
-        while count > 0:
-            tmp = src.pop(0)
-            tmp[0] = getItemById(data.units, tmp[0])
-            tmp[1] = getItemById(data.points, tmp[1])
-            if data.hitches == []:
-                data.hitches.append(type.Hitch(tmp[0]))
-                data.hitches[-1].addPoint(tmp[1])
-            else:
-                for hitch in data.hitches:
-                    if hitch.unit == tmp[0]:
-                        index = data.hitches.index(hitch)
-                        data.hitches[index].addPoint(tmp[1])
-                    else:
-                        data.hitches.append(type.Hitch(tmp[0]))
-                        data.hitches[-1].addPoint(tmp[1])
             count -= 1
 
     except Exception as e:
