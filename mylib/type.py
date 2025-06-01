@@ -393,23 +393,19 @@ class GeoNonlinear: # 几何非线性
 
                     for point in self.points:
                         point.update()
-
                     for unit in self.units:
                         unit.update()
-
                     R_step = P_step - F_step
                     for c in self.cl:
                         R_step[c] = 0
-                    
+                        
                     if iter == max_iterator - 1:
                         print(f"Not converged in step {step}, iteration {iter}")
                         break
                 else:
                     outputs.append(OutputData(self.points).__copy__())
-
                     F.append(F_step)
                     u.append(u_step)
-
                     break
 
         return outputs
