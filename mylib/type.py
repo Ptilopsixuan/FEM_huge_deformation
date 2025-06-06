@@ -375,8 +375,8 @@ class GeoNonlinear: # 几何非线性
         
         for step in range(steps):
             P_step = self.Pe * ((1 + step) / steps)  # 逐步加载
-            F_step = F[step]
-            u_step = u[step]
+            F_step = F[step].copy()
+            u_step = u[step].copy()
             R_step = P_step - F_step
             for iter in range(max_iterator):    # 迭代求解
                 self.reset()
